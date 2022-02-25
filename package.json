@@ -1,0 +1,34 @@
+{
+  "name": "convert-to-dts",
+  "version": "1.0.0",
+  "description": "Convert some JavaScript/TypeScript code string into a .d.ts TypeScript Declaration code string",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "prettier": "^2.5.1",
+    "vitest": "^0.5.5"
+  },
+  "dependencies": {
+    "typescript": "^4.5.5"
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsc && cp dist/*.d.ts api/ && prettier --write api/index.d.ts"
+  },
+  "keywords": [
+    "convert",
+    "transform",
+    ".d.ts",
+    "dts",
+    "declaration",
+    "definition",
+    "header"
+  ],
+  "author": "Lily Scott <me@suchipi.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suchipi/convert-to-dts.git"
+  },
+  "license": "MIT"
+}
