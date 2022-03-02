@@ -18,10 +18,13 @@ test("basic usage", () => {
     }
   `;
 
-  const result = convertToDeclaration(code);
+  const result = convertToDeclaration({
+    "code.ts": code,
+  });
 
   expect(result).toMatchInlineSnapshot(`
-    "import path from \\"path\\";
+    {
+      "code.d.ts": "import path from \\"path\\";
     /**
      * Comment :D
      */
@@ -29,7 +32,27 @@ test("basic usage", () => {
         blah: typeof path;
         constructor();
     }
-    "
+    ",
+    }
+  `);
+});
+
+test("multiple files", () => {
+  const result = convertToDeclaration({
+    "one.ts": `export const one = 1;`,
+    "two.ts": `
+      import {one} from "./one";
+      export const two = one + one;
+    `,
+  });
+
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "one.d.ts": "export declare const one = 1;
+    ",
+      "two.d.ts": "export declare const two: any;
+    ",
+    }
   `);
 });
 
@@ -40,9 +63,12 @@ test("errors properly", () => {
   `;
 
   expect(() => {
-    convertToDeclaration(code);
+    convertToDeclaration({
+      "code.ts": code,
+    });
   }).toThrowErrorMatchingInlineSnapshot(`
 "Conversion failed:
-Exported variable 'blah' has or is using private name 'dsjfkldsjlkf'.
-Exported variable 'blah' has or is using private name 'd43y89jf4yituh4eruoi9cm43yt87h4reiy'."`);
+code.ts: Exported variable 'blah' has or is using private name 'dsjfkldsjlkf'.
+code.ts: Exported variable 'blah' has or is using private name 'd43y89jf4yituh4eruoi9cm43yt87h4reiy'."
+`);
 });
