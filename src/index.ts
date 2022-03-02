@@ -33,7 +33,20 @@ export function convertToDeclaration(
     optionsWithChanges,
     host
   );
-  program.emit();
+  const emitResult = program.emit();
+
+  if (emitResult.emitSkipped) {
+    throw new Error(
+      "Conversion failed:\n" +
+        emitResult.diagnostics
+          .map((diag) =>
+            typeof diag.messageText === "string"
+              ? diag.messageText
+              : JSON.stringify(diag.messageText)
+          )
+          .join("\n")
+    );
+  }
 
   return output;
 }

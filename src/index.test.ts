@@ -32,3 +32,17 @@ test("basic usage", () => {
     "
   `);
 });
+
+test("errors properly", () => {
+  const code = `
+    declare var blah: dsjfkldsjlkf;
+    declare var blah: d43y89jf4yituh4eruoi9cm43yt87h4reiy;
+  `;
+
+  expect(() => {
+    convertToDeclaration(code);
+  }).toThrowErrorMatchingInlineSnapshot(`
+"Conversion failed:
+Exported variable 'blah' has or is using private name 'dsjfkldsjlkf'.
+Exported variable 'blah' has or is using private name 'd43y89jf4yituh4eruoi9cm43yt87h4reiy'."`);
+});
